@@ -1,4 +1,4 @@
-# Crisp
+# Simple Neural Networks
 
 1.cpp the original file of the model
 
