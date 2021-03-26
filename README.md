@@ -17,7 +17,7 @@
 ## Models Overview
 ### Core Model
 * 10_mod1.cpp
-* [3.cpp](#3.cpp)
+* 3.cpp
 
 ### Variation Models
 * Permanently Excite or Inhibit a Neuron
@@ -42,19 +42,23 @@
 * 10_mod4.cpp
 * 10_mod2.cpp
 * matrix.cpp
+* results.py
 
 ### Old Models
-* Old Models (Python)
-* Old Models (C++)
+* 2.cpp
+* 2_1.py
+* 2.py
+* 1.cpp
+* 1.py
 
 
 # Models Detailed
 
-#### Old Models (Python)
-###### 1.py
-* inputs: *None*
-* parameters: *N, probability of connection, timestep*
-* outputs: *a graph that shows the categorization of a random vector in given timestep*
+## Old Models
+* **1.py**
+    * inputs: *None*
+    * parameters: *N, probability of connection, timestep*
+    * outputs: *a graph that shows the categorization of a random vector in given timestep*
 
 * **2.py**
     * new parameters: *number of trials*
@@ -64,7 +68,6 @@
 * **2_1.py**
     * new: *cleaner code for each trial*
 
-#### Old Models (C++)
 * **1.cpp**
     * new: *C++ version of 1.py*
     * new outputs: *(to txt) [timesteps, on neuron] coordinates for graphing*
@@ -72,16 +75,11 @@
 * **2.cpp**
     * new: *clearner code*
 
-* **results.py**
-    * inputs: *(from txt) [timesteps, on neuron] coordinates for graphing*
-    * outputs: *a graph that shows the desired end cycle of a random vector*
-
-
-#### Models
-###### 3.cpp
-* new inputs: *(from txt) adjacency matrix*
-* new: *categorizes all possible random vector given a random matrix*
-* new outputs: *id and population for all cycles*
+## Models
+* **3.cpp**
+    * new inputs: *(from txt) adjacency matrix*
+    * new: *categorizes all possible random vector given a random matrix*
+    * new outputs: *id and population for all cycles*
 
 * **4.cpp**
     * new: *calculates the distance of each vector to its cycle*
@@ -136,6 +134,10 @@
 * **11.py**
     * new: *explores the characteristics of the network graph*
 
-#### Helper Files
+## Helper Files
+* **results.py**
+    * inputs: *(from txt) [timesteps, on neuron] coordinates for graphing*
+    * outputs: *a graph that shows the desired end cycle of a random vector*
+
 * **matrix.cpp**
     * outputs: *(to txt) randomly generated adjacency matrix*
