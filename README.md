@@ -2,18 +2,29 @@
 
 ## Files
 
-#### Old Files (Python)
+#### Old Models (Python)
 * **1.py**
-    * input: *None*
+    * inputs: *None*
     * parameters: *N, probability of connection, timesteps*
-    * output: *a graph that shows the end cylce of a random vector*
+    * outputs: *a graph that shows the end cylce of a random vector*
+
+* **2.py**
+    * new parameters: *number of trials*
+    * new: *new random vector for each trial, cleaner code for each trial*
+    * new outputs: *categorization of unique, transient, and repeating vectors for all vectors in all trials*
 
 * **2_1.py**
-    * input: *None*
-    * parameters: *N, probability of connection, timesteps, number of trials*
-    * output: *a graph that shows the end cycle of a random vector for each trial*
+    * new: *cleaner code for each trial*
+\
+\
+#### Old Models (C++)
+* **1.cpp**
+    * new: *C++ version of 1.py*
+        * new outputs: *timesteps, on neuron coordinates for graphing*
 
-#### Old Files (C++)
+
+* **2.cpp**
+    * new: *clearner code*
 
 
 bifiltration.py\
