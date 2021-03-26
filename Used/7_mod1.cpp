@@ -1,10 +1,10 @@
 #include <random>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <fstream>
 #include <chrono>
 #include <ctime>
-#include <string>
 using namespace std;
 
 vector<int> vector_gen(long int state, int N){ //converts states from a number to an active neuron vector
@@ -53,86 +53,59 @@ void print_matrix(int* matrix, int N, ofstream& results){ //prints out a matrix
     }
 }
 
-void permutation(long int num, ofstream& results, int*& visited, int num_cat, int N){
-    int* sums = new int [num_cat]; //sums
-    for(int i = 0; i < num_cat; i++){
-        sums[i] = 0;
-    }
-    cout << num << endl;
-    vector<int> vect = vector_gen(num, N);
-    for(int i = 0; i < N; i++){
-        if(find(vect.begin(),vect.end(),i) != vect.end()){ //if num in vect
-            if(visited[num]){
-                long int mutate = num - pow(2, N - 1 - i); //inhibit the neuron
-                                                cout << mutate << "[" << visited[mutate] << "] ";
-                sums[visited[mutate] - 1]++;
-                //visited[mutate] = 0;
-            }
-        }
-        else{
-            if(visited[num]){
-                long int mutate = num + pow(2, N - 1 - i); //stimulate the neuron
-                sums[visited[mutate] - 1]++;
-                                                                cout << mutate << "(" << visited[mutate] << ") ";
-
-                //visited[mutate] = 0;
-            }
-        }
-    }
-    cout << endl;
-    results << endl << num << ",";
-    for(int i = 0; i < num_cat; i++){
-        results << sums[i] << ",";
-    }
-}
-
 int main(){
     /********** Start Timing **********/
     auto start = chrono::system_clock::now();
     time_t start_time = chrono::system_clock::to_time_t(start);
     cout << endl << "\t\t" << "Started computation at " << ctime(&start_time);
 
+    /********** Parameters **********/
+    int N = 25; //number of nodes
+    double px = 0.5; //probability of excitatory connection
+    double pc = 0.5; //probability of connection
+    int dur = 250; //time steps
+
     /********** Initialization **********/
-    int N, num_cat; //number of nodes, number of categories
     ofstream results; //record results in txt
-    results.open("results.csv");
+    results.open("results.txt");
+    ofstream results2;
+    results2.open("results_detailed.txt");
 
-    ifstream visits; //read in visits
-    visits.open("category_25.txt");
-    visits >> N >> num_cat;
-
-    int* matrix = new int [N * N]; //define matrix
     ifstream the_matrix; //read in matrix
     the_matrix.open("set_matrix_25.txt");
+    int* matrix = new int [N * N]; //define matrix
     for(int i = 0; i < N * N; i++){
         the_matrix >> matrix[i];
     }
     the_matrix.close();
-    print_matrix(matrix, N, results); //prints out matrix
-
-    long int* highest = new long int [num_cat];
-    results << endl << ",";
-    for(int i = 0; i < num_cat; i++){ //read in the categories
-        visits >> highest[i];
-        results << highest[i] << ",";
-    }
+    //print_matrix(matrix, N, results); //prints out matrix
     long int pos = pow(2,N); //all the possibilities
-    int* visited = new(nothrow) int [pos](); //set up visited
+
+    int** visited = new(nothrow) int* [pos](); //track the y_highest for all active neuron vectors
     if(!visited){
         cout << "Array memory allocation failed\n";
         return 0;
     }
-    for(int i = 0; i < pos; i++){
-        visits >> visited[i]; //read in visited from category
-    }
-    visits.close();
+    int loop1 = 0, loop2 = -1;
 
-    for(int k = 0; k < num_cat; k++){
-        vector<long int> loop;
-        vector<int> vect = vector_gen(highest[k], N); //initialize active neuron vector
+    vector<long int> highest;
+    list<int> highest_index;
+
+    /********** Simulation **********/
+    for(long int a = 0; a < pos; a++){ //run for every vector
+        if(visited[a]) continue;
+        vector<int> vect = vector_gen(a, N); //initialize active neuron vector
         vector<int> vect_next; //empty vector to store results for the next active neuron vector
-        int r = 0, y = 0;
-        while(y != highest[k]){
+        vector<int> vect_visited; //empty vetor to store all newly visited active neuron vectors in this run
+        /* r: a variable used in matrix multiplication
+           y_highest: the highest number in the loop for this run
+           y: a variable used to store the number for the active neuron vector */
+        int r = 0;
+        long int y_highest = -1, y;
+        visited[a] = &loop1; //mark this active neuron vector as visited
+        vect_visited.push_back(a);
+        for(int t = 0; t < dur; t++){ //duration of one run
+            /*** generate new vect ***/
             for(int i = 0; i < N; i++){
                 for(int j = 0 ; j < vect.size(); j++){
                     r += matrix[vect[j] * N + i];
@@ -142,19 +115,47 @@ int main(){
                 }
                 r = 0; //clear r
             }
+            /*** wrap up ***/
             vect = vect_next;
             vect_next.clear(); //clear the active neuron vector
             y = num_gen(vect, N); //transform the active neuron vector into an integer
-            loop.push_back(y);
+            if(visited[y]){
+                if(*visited[y] == 0){
+                    visited[y] = &loop2; //start of the loop, loop through it again
+                    if(y_highest < y){
+                        y_highest = y; //change y_highest
+                    }
+                }
+                else{
+                    break; //break loop
+                } 
+            }
+            else{ //not visited
+                visited[y] = &loop1; //mark this active neuron vector as visited for the first time
+                vect_visited.push_back(y); //add active neuron vector
+            }
         }
-        for(int i = 0; i < loop.size(); i++){
-            permutation(loop[i], results, visited, num_cat, N);
+        /*** categorization ***/
+        vector<long int> loop;
+        if(*visited[y] == -1){ //not mapped
+            highest.push_back(y_highest); //store the highest value
+            highest_index.push_back(highest.size());
+            visited[y] = &(highest_index.back());
+        }
+        for(int i = 0; i < vect_visited.size(); i++){
+            visited[vect_visited[i]] = visited[y];
         }
     }
-
     /********** Printing Results **********/
-
+    results << N << endl << highest.size() << endl;
+    for(int i = 0; i < highest.size(); i++){
+        results << highest[i] << endl;
+    }
+    for(int i = 0; i < pos; i++){
+        results2 << *visited[i] << " ";
+    }
     results.close();
+    results2.close();
     if(visited) delete [] visited;
 
     /********** End Timing **********/

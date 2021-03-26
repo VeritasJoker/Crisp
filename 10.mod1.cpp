@@ -5,9 +5,10 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
+#include <map>
 using namespace std;
 
-vector<int> vector_gen(long int state, int N){ //converts states from a number to an active neuron vector
+vector<int> vector_gen(long int state, int N){ // converts states from a number to an active neuron vector
     vector<int> vect;
     for(int i = 0; state > 0; i++){
         if(state % 2 == 1){
@@ -18,7 +19,7 @@ vector<int> vector_gen(long int state, int N){ //converts states from a number t
     return vect;
 }
 
-long int num_gen(vector<int> vect, int N){ //converts states from an active neuron vetor to a number
+long int num_gen(vector<int> vect, int N){ // converts states from an active neuron vetor to a number
     long int n = 0;
     for(int i = 0; i < vect.size(); i++){
         n += pow(2, N - 1 - vect[i]);
@@ -26,7 +27,7 @@ long int num_gen(vector<int> vect, int N){ //converts states from an active neur
     return n;
 }
 
-void print_digit(int num, ofstream& results){ //prints out a digit
+void print_digit(int num, ofstream& results){ // prints out a digit
     if(num < 10 && num >= 0){
         results << " " << num;
     }
@@ -35,7 +36,7 @@ void print_digit(int num, ofstream& results){ //prints out a digit
     }
 }
 
-void print_matrix(int* matrix, int N, ofstream& results){ //prints out a matrix
+void print_matrix(int* matrix, int N, ofstream& results){ // prints out a matrix
     results << "MATRIX" << endl << "    ";
     for(int i = 0; i < N; i++){
         print_digit(i, results);
@@ -60,49 +61,50 @@ int main(){
     cout << endl << "\t\t" << "Started computation at " << ctime(&start_time);
 
     /********** Parameters **********/
-    int N = 25; //number of nodes
-    double px = 0.5; //probability of excitatory connection
-    double pc = 0.5; //probability of connection
-    int dur = 250; //time steps
+    int N; // number of nodes
 
     /********** Initialization **********/
-    ofstream results; //record results in txt
+    ofstream results; // record results in txt
     results.open("results.txt");
+    // ofstream results2;
+    // results2.open("results_detailed.txt");
 
-    ifstream the_matrix; //read in matrix
+    ifstream the_matrix; // stream for matrix
     the_matrix.open("set_matrix_25.txt");
-    int* matrix = new int [N * N]; //define matrix
+    the_matrix >> N; // read in vector number
+    int* matrix = new int [N * N]; // define matrix
     for(int i = 0; i < N * N; i++){
-        the_matrix >> matrix[i];
+        the_matrix >> matrix[i]; // read in matrix
     }
     the_matrix.close();
     //print_matrix(matrix, N, results); //prints out matrix
-    long int pos = pow(2,N); //all the possibilities
+    long int pos = pow(2,N); // all the possibilities
 
-    int** visited = new(nothrow) int* [pos](); //track the y_highest for all active neuron vectors
+    int** visited = new(nothrow) int* [pos](); // track the y_highest for all active neuron vectors
     if(!visited){
-        cout << "Array memory allocation failed\n";
+        cout << "Array memory allocation failed\n"; // return error
         return 0;
     }
     int loop1 = 0, loop2 = -1;
 
     vector<long int> highest;
     list<int> highest_index;
+    map<long int, long int> distribution;
 
     /********** Simulation **********/
-    for(long int a = 0; a < pos; a++){ //run for every vector
-        if(visited[a]) continue;
-        vector<int> vect = vector_gen(a, N); //initialize active neuron vector
-        vector<int> vect_next; //empty vector to store results for the next active neuron vector
+    for(long int a = 0; a < pos; a++){ // run for every vector
+        if(visited[a]) continue; // skip if vector visited
+        vector<int> vect = vector_gen(a, N); // initialize active neuron vector
+        vector<int> vect_next; // empty vector to store results for the next active neuron vector
         vector<int> vect_visited; //empty vetor to store all newly visited active neuron vectors in this run
         /* r: a variable used in matrix multiplication
            y_highest: the highest number in the loop for this run
            y: a variable used to store the number for the active neuron vector */
-        int r = 0;
+        int r = 0, end_loop = 0;
         long int y_highest = -1, y;
         visited[a] = &loop1; //mark this active neuron vector as visited
         vect_visited.push_back(a);
-        for(int t = 0; t < dur; t++){ //duration of one run
+        while(end_loop == 0){ //duration of one run
             /*** generate new vect ***/
             for(int i = 0; i < N; i++){
                 for(int j = 0 ; j < vect.size(); j++){
@@ -125,6 +127,7 @@ int main(){
                     }
                 }
                 else{
+                    end_loop = 1;
                     break; //break loop
                 } 
             }
@@ -135,24 +138,30 @@ int main(){
         }
         /*** categorization ***/
         vector<long int> loop;
-        if(*visited[y] == -1){ //not mapped
-            highest.push_back(y_highest); //store the highest value
-            highest_index.push_back(highest.size());
-            visited[y] = &(highest_index.back());
+        if(*visited[y] == -1){ // not mapped
+            highest.push_back(y_highest); // store the highest value
+            highest_index.push_back(highest.size()); // store the highest value index
+            visited[y] = &(highest_index.back()); // mark the highest with the right index
+            distribution[y_highest] = 0; // initiate the key
         }
+        else{ // already mapped
+            y_highest = highest[*visited[y] - 1]; // get y-highest
+        }
+        distribution[y_highest] += vect_visited.size(); // add to the value
         for(int i = 0; i < vect_visited.size(); i++){
-            visited[vect_visited[i]] = visited[y];
+            visited[vect_visited[i]] = visited[y]; // mark all vetors visited with the right index
         }
     }
     /********** Printing Results **********/
     results << N << endl << highest.size() << endl;
     for(int i = 0; i < highest.size(); i++){
-        results << highest[i] << endl;
+        results << highest[i] << " " << distribution[highest[i]] << endl;
     }
-    for(int i = 0; i < pos; i++){
-        results << *visited[i] << " ";
-    }
+    // for(int i = 0; i < pos; i++){
+    //     results2 << *visited[i] << " ";
+    // }
     results.close();
+    // results2.close();
     if(visited) delete [] visited;
 
     /********** End Timing **********/

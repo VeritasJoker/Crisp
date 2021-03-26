@@ -45,29 +45,33 @@ long int matrix_multiplication(vector<int> &vect, vector<int> &vect_next, int* &
 
 int main(){
     /********** Parameters **********/
-    int N = 25; //number of nodes
+    int N; //number of nodes
     double px = 0.5; //probability of excitatory connection
     double pc = 0.5; //probability of connection
     int dur = 250; //time steps
-    bool single_test = true;
 
     /********** Initialization **********/
     ofstream results; //record results in txt
     results.open("test_results.txt");
 
-    int* matrix = new int [N * N]; //define matrix
     ifstream the_matrix; //read in matrix
     the_matrix.open("set_matrix_25.txt");
+    the_matrix >> N;
+    int* matrix = new int [N * N]; //define matrix
     for(int i = 0; i < N * N; i++){
         the_matrix >> matrix[i];
     }
     the_matrix.close();
     long int pos = pow(2,N); //all the possibilities
 
-    long int y;
+    long int y, a;
+    bool single_test;
+    cout << "Single test or multiple? (single test outputs to txt, multiple tests output to console)" 
+    << endl << "(reply 0 or 1)" << endl;
+    cin >> single_test;
+
     if(single_test){
-        /********** Single Test **********/
-        long int a;
+        /********** Single Test (output to txt) **********/
         cin >> a;
         results << a << " ";
         vector<int> vect = vector_gen(a, N), vect_next;
@@ -78,15 +82,15 @@ int main(){
         results.close();
     }
     else{
-        /********** Multiple Test **********/
-        for(long int a = 0; a < pos; a++){
+        /********** Multiple Test (output to console) **********/
+        while(cin >> a){
+            cout << "results for vect " << a << ":" << endl << a << " ";
             vector<int> vect = vector_gen(a, N), vect_next;
             for(int t = 0; t < dur; t++){
                 y = matrix_multiplication(vect, vect_next, matrix, N);
-                if(y == 1048311) break;
+                cout << y << " ";
             }
-            if(y != 1048311) cout << "shoot, something went wrong" << endl;
+            cout << endl << endl;
         }
-        results.close();
     }
 }  

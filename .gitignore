@@ -1,0 +1,18 @@
+# Things related to imports and results
+*.csv
+*.xlsx
+*.txt
+
+*Results
+
+# Things related to testing
+test*.cpp
+
+# Other packages
+Used/Old/matplotlib-cpp
+
+# Things related to program
+*.o
+*.ko
+*.obj
+*.elf

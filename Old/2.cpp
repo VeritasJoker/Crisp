@@ -123,9 +123,6 @@ int main(){
                 }
                 r = 0; //clear r
             }
-            if(t >= 50 && vect_next.size() > highest_active.size()){
-                highest_active = vect_next; //the longest active neuron
-            }
             vect = vect_next;
             vect_next.clear(); //clear the active neuron vector
         }
@@ -143,5 +140,4 @@ int main(){
     }
     results.close();
 
-    delete [] visited;
 }

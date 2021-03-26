@@ -1,17 +1,54 @@
 # Simple Neural Network
 
-## Definitions:
+## Definitions
 * **N:** number of neurons in the network
 * **Categorization of a vector:**
-    * if timestep given, calculates all previous states of the vector at given timestep
+    * if timestep given, calculates all the states of the vector in given timestep
     * if not, calculates the final state or end cycle of the vector
+* **Vectors:**
+    * Number formt: 3
+    * Bitset format: 0000000000000000000000011
+    * Vector format: [23,24]
 * **Cycle:**
-    * **id:** The biggest integer from all vectors in the cycle
-    * **population:** The number of vectors that is categorized to the cycle)
-    * **length:** number of unqiue vectors in the cycle\
+    * **id:** The biggest vector (number format) in the cycle
+    * **population:** The number of vectors that is categorized to the cycle
+    * **length:** number of unqiue vectors in the cycle
+
+## Models Overview
+### Core Model
+* 10_mod1.cpp
+* 3.cpp
+
+### Variation Models
+* Permanently Excite or Inhibit a Neuron
+    * 10_mod5.cpp
+    * 10_mod3.cpp
+    
+* Random Walk
+    * 9.cpp
+    * 8.cpp
+    * 7_mod2.cpp (not used)
+    * 6.cpp (not used)
+    * 5.cpp
+
+* Detailed
+    * 7_mod1.cpp (categorization)
+    * 4+matrix.cpp (distance)
+    * 4 (distance)
+
+### Helpers
+* 11.py
+* 10_mod6.cpp
+* 10_mod4.cpp
+* 10_mod2.cpp
+* matrix.cpp
+
+### Old Models
+* Old Models (Python)
+* Old Models (C++)
 
 
-## Models
+## Models Detailed
 
 #### Old Models (Python)
 * **1.py**
@@ -25,9 +62,8 @@
     * new outputs: *categorization of unique, transient, and repeating vectors for all vectors in all trials*
 
 * **2_1.py**
-    * new: *cleaner code for each trial*\
+    * new: *cleaner code for each trial*
 
-\
 #### Old Models (C++)
 * **1.cpp**
     * new: *C++ version of 1.py*
@@ -40,11 +76,8 @@
     * inputs: *(from txt) [timesteps, on neuron] coordinates for graphing*
     * outputs: *a graph that shows the desired end cycle of a random vector*
 
-\
-#### Used Models
-* **matrix.cpp**
-    *outputs: (to txt) randomly generated adjacency matrix*
 
+#### Models
 * **3.cpp**
     * new inputs: *(from txt) adjacency matrix*
     * new: *categorizes all possible random vector given a random matrix*
@@ -61,45 +94,48 @@
     * unique: *given a set matrix, apply noise with probability to one trial given a random starting vector*
     * unique outputs: *transition matrix between cycles*
 
-* **6.cpp**
+* **6.cpp (not used)**
     * unique: *noise is randomized*
 
-* **7.cpp**
+* **7_mod1.cpp**
     * new outputs: *(to txt 1) id and population for all cycles    (to txt 2) categorization of all vectors*
 
+* **7_mod2.cpp (not used)**
+    * unique inputs: *(from txt 1) id and population for all cycles    (from txt 2) categorization of all vectors*
+    * unique: *apply noise (excite or inhibit a neuron) after reaching an end cycle*
 
-bifiltration.py\
-input: degree and distance\
-parameters: number of points\
-output: distance matrix, sorted distance matrix, a graph of the rips complex\
-(Enter a negative degree and distance to quit)
+* **8.cpp**
+    * unique inputs: *(from txt 1) id and population for all cycles    (from txt 2) categorization of all vectors*
+    * unique: *cleaner and faster code for 5.cpp, using bitsets*
 
-\
-bifiltration2.py\
-input: none\
-parameters: number of points\
-output: distance matrix. sorted edge lengths, sorted distance matrix, a graph of rips complexes at all critical points
+* **9.cpp**
+    * unique: *noise only happens after reaching an end cycle*
 
-\
-bifiltration3.py\
-input: none\
-parameters: number of points\
-output: distance matrix, sorted edge lengths, edge dictionary, sorted distance matrix, sorted edge matrix, the distribution of number of critical points, a graph of the distribution
+* **10.mod1.cpp**
+    * same as 3.cpp
 
-\
-bifiltration4.py\
-input: none\
-parameters: number of points, number of trials\
-output: (to csv) distribution of the number of critical-bigrades for edges
+* **10_mod2.cpp**
+    * new inputs: *(from txt 2) results from 10.mod1*
+    * new: get all vectors in stable cycle and get common on neurons
+    * new outputs: on neurons that are common in all vectors of a stable cycle for all stable cycles
 
-\
-bifiltration5.py\
-input: none\
-parameters: number of points\
-output: (to console) connectivity matrix for all critial-bigrades
+* **10.mod3.cpp**
+    * new parameters: *fixed neuron*
+    * new: *same as 10.mod1 besides an always excited neuron*
 
-\
-bifiltration6.py\
-input: none\
-parameters: number of points, number of trials\
-output: (to csv and txt) connectivity matrix, sum of connectivity matrix
+* **10.mod4.cpp**
+    * new: *same as 10.mod2 besides taking the always excited neuron into consideration*
+
+* **10.mod5.cpp**
+    * new parameters: *inhib neuron*
+    * new: *same as 10.mod1 besides an always inhibited neuron*
+
+* **10.mod6.cpp**
+    * new: *same as 10.mod2 besides taking the always inhibited neuron into consideration*
+
+* **11.py**
+    * new: *explores the characteristics of the network graph*
+
+#### Helper Files
+* **matrix.cpp**
+    * outputs: *(to txt) randomly generated adjacency matrix*
