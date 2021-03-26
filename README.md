@@ -2,12 +2,19 @@
 
 ## Files
 
-#### Old Files (Python Files)
+#### Old Files (Python)
 * **1.py**
-    * *input:* None
-    * *output:* graph of the categorization of a random vector
+    * input: *None*
+    * parameters: *N, probability of connection, timesteps*
+    * output: *a graph that shows the end cylce of a random vector*
 
-#### Old Files (C++ Files)
+* **2_1.py**
+    * input: *None*
+    * parameters: *N, probability of connection, timesteps, number of trials*
+    * output: *a graph that shows the end cycle of a random vector for each trial,
+    new tasdfafdasf*
+
+#### Old Files (C++)
 
 
 bifiltration.py\
