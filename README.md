@@ -17,7 +17,7 @@
 ## Models Overview
 ### Core Model
 * 10_mod1.cpp
-* 3.cpp
+* [3.cpp](#3.cpp)
 
 ### Variation Models
 * Permanently Excite or Inhibit a Neuron
@@ -51,10 +51,10 @@
 # Models Detailed
 
 #### Old Models (Python)
-* **1.py**
-    * inputs: *None*
-    * parameters: *N, probability of connection, timestep*
-    * outputs: *a graph that shows the categorization of a random vector in given timestep*
+###### 1.py
+* inputs: *None*
+* parameters: *N, probability of connection, timestep*
+* outputs: *a graph that shows the categorization of a random vector in given timestep*
 
 * **2.py**
     * new parameters: *number of trials*
@@ -78,10 +78,10 @@
 
 
 #### Models
-* **3.cpp**
-    * new inputs: *(from txt) adjacency matrix*
-    * new: *categorizes all possible random vector given a random matrix*
-    * new outputs: *id and population for all cycles*
+###### 3.cpp
+* new inputs: *(from txt) adjacency matrix*
+* new: *categorizes all possible random vector given a random matrix*
+* new outputs: *id and population for all cycles*
 
 * **4.cpp**
     * new: *calculates the distance of each vector to its cycle*
