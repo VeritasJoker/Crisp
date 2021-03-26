@@ -11,8 +11,7 @@
 * **2_1.py**
     * input: *None*
     * parameters: *N, probability of connection, timesteps, number of trials*
-    * output: *a graph that shows the end cycle of a random vector for each trial,
-    new tasdfafdasf*
+    * output: *a graph that shows the end cycle of a random vector for each trial*
 
 #### Old Files (C++)
 
