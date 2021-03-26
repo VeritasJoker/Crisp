@@ -7,6 +7,8 @@
 
 # Things related to testing
 test*.cpp
+test.cpp
+test*
 
 # Other packages
 Used/Old/matplotlib-cpp
