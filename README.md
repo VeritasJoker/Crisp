@@ -16,15 +16,30 @@
 * **2_1.py**
     * new: *cleaner code for each trial*
 \
-\
 #### Old Models (C++)
 * **1.cpp**
     * new: *C++ version of 1.py*
-        * new outputs: *timesteps, on neuron coordinates for graphing*
-
+    * new outputs: *(to txt) [timesteps, on neuron] coordinates for graphing*
 
 * **2.cpp**
     * new: *clearner code*
+
+* **results.py**
+    * inputs: *(from txt) [timesteps, on neuron] coordinates for graphing*
+    * outputs: *a graph that shows the desired end cycle of a random vector*
+\
+#### Used Models
+* **3.cpp**
+    * new: *categorizes all possible random vector given a random matrix*
+    * new outputs: *id (biggest vector in the cycle) and population (number of vectors that go into 
+    the cycle) for all cycles*
+
+* **4.cpp**
+    * new: *calculates the distance of each vector to its cycle
+    * unique outputs: *(to txt 1) id and population for all cycles*
+    *(to txt 2) distance of each vector to its cycle*
+
+
 
 
 bifiltration.py\
