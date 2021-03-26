@@ -2,7 +2,6 @@
 *.csv
 *.xlsx
 *.txt
-
 *Results
 
 # Things related to testing
@@ -11,7 +10,7 @@ test.cpp
 test*
 
 # Other packages
-Used/Old/matplotlib-cpp
+Old/matplotlib-cpp
 
 # Things related to program
 *.o
